@@ -3,30 +3,21 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import actions from '../actions';
-
-const { renameUser, toggleAuthenticated } = actions;
-
-const handleToggleClick = () => toggleAuthenticated();
-
-const handleNameChange = (e) => {
-  const newName = e.target.value;
-  renameUser(newName);
-};
-
 const Home = ({ user }) => (
-  <div className="container margin-top-small">
+  <div>
     <Helmet title="Home" />
-    <h1>Home</h1>
-    <h3 className="center">Data from (prehydrated) Redux store:</h3>
-    <h4 className="center normal">user.name: <span className="bold">{user.name}</span></h4>
-    <h4 className="center normal">user.authenticated: <span className="bold">{user.authenticated ? 'true' : 'false'}</span></h4>
-    <div className="flex-column items-center margin-top-big">
-      <input type="text" defaultValue={user.name} onChange={handleNameChange} />
-      <button className="margin-top-small button--accent" onClick={handleToggleClick}>Toggle Authenticated</button>
+    <div className="width-100 height-100-vh" style={{ background: 'url("/fistbump.jpg")', backgroundSize: 'cover' }}>
+      <div className="flex-column items-center justify-center bg-black-50 width-100 height-100">
+        <h1 className="c-text-inverse bold uppercase h0 wide">Dare to trade books.</h1>
+        <p className="c-text-inverse bold margin width-75 h4">
+          Booktrading. Everyone talks about it but only the truly professional are able to trade books day in and day out.
+          Here at bookTrader we understand your commitment and want to give you what you need to take your book trading to the next level.
+        </p>
+        <button className="button--accent margin">Sign in with Github</button>
+      </div>
     </div>
   </div>
-  );
+);
 
 Home.propTypes = {
   user: PropTypes.objectOf(PropTypes.shape).isRequired,
