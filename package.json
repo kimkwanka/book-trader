@@ -1,7 +1,7 @@
 {
-  "name": "niru",
+  "name": "book-trader",
   "version": "1.0.0",
-  "description": "Universal / isomorphic fullstack boilerplate",
+  "description": "Universal / isomorphic fullstack book trading app.",
   "main": "client.js",
   "license": "MIT",
   "scripts": {

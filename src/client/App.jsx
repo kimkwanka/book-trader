@@ -23,7 +23,7 @@ const App = ({ serverRoute }) => {
       <div className="App">
         <Helmet
           htmlAttributes={{ lang: 'en' }}
-          titleTemplate="niru | %s"
+          titleTemplate="bookTrader | %s"
           titleAttributes={{ itemprop: 'name', lang: 'en' }}
           meta={[
             { name: 'description', content: 'Universal fullstack boilerplate' },
