@@ -1,6 +1,6 @@
 import Home from '../client/components/Home';
-import About from '../client/components/About';
-import StyleGuide from '../client/components/Styleguide';
+import AllBooks from '../client/components/AllBooks';
+import Dashboard from '../client/components/Dashboard';
 
 const routes = [
   {
@@ -9,14 +9,14 @@ const routes = [
     component: Home,
   },
   {
-    path: '/about',
+    path: '/allbooks',
     exact: true,
-    component: About,
+    component: AllBooks,
   },
   {
-    path: '/styleguide',
+    path: '/dashboard',
     exact: true,
-    component: StyleGuide,
+    component: Dashboard,
   },
 ];
 

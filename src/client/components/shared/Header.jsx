@@ -5,12 +5,13 @@ const Header = () =>
   (
     <header>
       <div className="container flex">
-        <div className="logo-text">bookTrader</div>
+        <NavLink className="logo-text" to="/" exact activeClassName="navItemActive">bookTrader</NavLink>
         <nav>
           <ul>
-            <li><NavLink to="/" exact activeClassName="navItemActive">Home</NavLink></li>
-            <li><NavLink to="/about" activeClassName="navItemActive">About</NavLink></li>
-            <li><NavLink to="/styleguide" activeClassName="navItemActive">Styleguide</NavLink></li>
+            <li><NavLink to="/dashboard" activeClassName="navItemActive">Dashboard</NavLink></li>
+            <li><NavLink to="/allbooks" activeClassName="navItemActive">All Books</NavLink></li>
+            <li><a className="button button--primary-clear" to="/">Sign In</a></li>
+            { /* <li><a className="button button--primary-clear" to="/">Sign Out</a></li> */ }
           </ul>
         </nav>
       </div>
