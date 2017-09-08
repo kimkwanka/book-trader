@@ -1,8 +1,6 @@
 import http from 'http';
 import app from './server';
 
-require('isomorphic-fetch');
-
 const PORT = process.env.PORT || 8080;
 
 const server = http.createServer(app);

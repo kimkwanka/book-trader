@@ -1,8 +1,8 @@
 import getBooks from './googleBooksApi';
 
 const api = (app) => {
-  app.get('/api', (req, res) => {
-    getBooks('Prey')
+  app.get('/api/books/:bookName', (req, res) => {
+    getBooks(req.params.bookName)
     .then((apiRes) => {
       res.json(apiRes);
     })

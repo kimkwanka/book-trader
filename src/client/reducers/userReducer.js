@@ -1,6 +1,7 @@
 const user = (state = {
   name: '',
   authenticated: false,
+  books: [],
 }, action) => {
   switch (action.type) {
     case 'TOGGLE_AUTHENTICATED': {

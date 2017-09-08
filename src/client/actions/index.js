@@ -1,11 +1,13 @@
 import { bindActionCreators } from 'redux';
 
 import * as userActions from './userActions';
+import * as uiStateActions from './uiStateActions';
 
 import store from '../../shared/store';
 
 const allActions = {
   ...userActions,
+  ...uiStateActions,
 };
 
 //  'Prebind' the Redux store's dispatch() to all action creators for easier usage.
