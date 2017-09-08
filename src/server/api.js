@@ -1,7 +1,13 @@
+import getBooks from './googleBooksApi';
+
 const api = (app) => {
   app.get('/api', (req, res) => {
-    res.json({
-      data: 'Some data!',
+    getBooks('Prey')
+    .then((apiRes) => {
+      res.json(apiRes);
+    })
+    .catch((err) => {
+      console.log(err);
     });
   });
 };
