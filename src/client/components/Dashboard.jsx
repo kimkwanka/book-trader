@@ -9,7 +9,7 @@ import actions from '../actions';
 
 const { setSearchResults } = actions;
 
-const handleAddBookClick = searchTerm => () => {
+const handleSearchBookClick = searchTerm => () => {
   axios.get(`/api/books/${searchTerm}`)
   .then((res) => {
     const foundBooks = res.data.items.map(item => item.volumeInfo);
@@ -23,7 +23,7 @@ const handleAddBookClick = searchTerm => () => {
 
 const handleKeyPress = (e, searchTerm) => {
   if (e.key === 'Enter') {
-    handleAddBookClick(searchTerm)();
+    handleSearchBookClick(searchTerm)();
   }
 };
 
@@ -39,28 +39,50 @@ const MyBooks = ({ user }) => {
 
   return (
     <div className="">
-      <h2>My Books</h2>
+      <h1>My Books</h1>
       {hasBooks ? books :
-      <h3>Your collection is empty.</h3>}
+      <h3 className="center">Your collection is empty. </h3>}
     </div>
   );
 };
 
-const SearchResults = ({ results }) => {
-  const searchResults = results.map(book => <h4 key={book.id}>{book.title}</h4>);
+const BookCard = ({ book }) => (
+  <div className="book-card flex-column border-round bg-white margin-right margin-bottom">
+    <div
+      className="book-card__thumbnail border-round-top"
+      style={{
+        background: `url(${book.imageLinks.thumbnail})`,
+        backgroundSize: 'cover',
+      }}
+    />
+    <div className="book-card__content padding flex-1">
+      <p className="italic">{book.authors}</p>
+      <h3 className="flex-1">{book.title}</h3>
+    </div>
+    <div className="book-card__footer padding-horizontal padding-bottom flex-column">
+      <button className="center">Add to My Books</button>
+    </div>
+  </div>
+);
+
+const SearchResults = ({ results, searchTerm }) => {
+  const searchResults = results.map(book => <BookCard key={book.id} book={book} />);
   return (
-    <div className="">
-      {searchResults}
+    <div className="margin-top">
+      <h3>Search our book database to add books to your collection: </h3>
+      {results.length > 0 ? <h4 className="center">Search results for &quot;{searchTerm}&quot;</h4> : null}
+      <div className="flex flex-wrap justify-center">
+        {searchResults}
+      </div>
     </div>
   );
 };
 
 const Dashboard = ({ user, uiState, state, setState }) => (
-  <div className="container margin-top-small">
+  <div className="container margin-vertical-small">
     <Helmet title="Dashboard" />
-    <h1>Dashboard</h1>
     <MyBooks user={user} />
-    <SearchResults results={uiState.searchResults} />
+    <SearchResults results={uiState.searchResults} searchTerm={state.searchTerm} />
     <div className="flex">
       <input
         type="text"
@@ -69,17 +91,22 @@ const Dashboard = ({ user, uiState, state, setState }) => (
         onChange={e => handleSearchTermChange(e, state, setState)}
         onKeyPress={e => handleKeyPress(e, state.searchTerm)}
       />
-      <button onClick={handleAddBookClick(state.searchTerm)}>Add Book</button>
+      <button onClick={handleSearchBookClick(state.searchTerm)}>Search</button>
     </div>
   </div>
 );
 
 SearchResults.propTypes = {
   results: PropTypes.arrayOf(PropTypes.object).isRequired,
+  searchTerm: PropTypes.string.isRequired,
 };
 
 MyBooks.propTypes = {
   user: PropTypes.objectOf(PropTypes.shape).isRequired,
+};
+
+BookCard.propTypes = {
+  book: PropTypes.objectOf(PropTypes.shape).isRequired,
 };
 
 Dashboard.propTypes = {
