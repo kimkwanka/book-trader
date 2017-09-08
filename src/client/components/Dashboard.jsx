@@ -7,13 +7,13 @@ import StateProvider from './shared/StateProvider';
 
 import actions from '../actions';
 
-const { setSearchResults } = actions;
+const { setSearchResults, addBook } = actions;
 
 const handleSearchBookClick = searchTerm => () => {
   axios.get(`/api/books/${searchTerm}`)
   .then((res) => {
     const foundBooks = res.data.items.map(item => item.volumeInfo);
-    console.log(res.data.items);
+    console.log(foundBooks);
     setSearchResults(foundBooks);
   })
   .catch((err) => {
@@ -33,20 +33,22 @@ const handleSearchTermChange = (e, state, setState) => {
   });
 };
 
-const MyBooks = ({ user }) => {
-  const books = user.books.map(book => <h3>{book.title}</h3>);
-  const hasBooks = books.length > 0;
+const MyBooks = ({ books }) => {
+  let myBooks = null;
+
+  if (books) {
+    myBooks = books.map(book => <h3 key={book.industryIdentifiers[0].identifier}>{book.title}</h3>);
+  }
 
   return (
     <div className="">
       <h1>My Books</h1>
-      {hasBooks ? books :
-      <h3 className="center">Your collection is empty. </h3>}
+      {myBooks || <h3 className="center">Your collection is empty. </h3>}
     </div>
   );
 };
 
-const BookCard = ({ book }) => (
+const BookCard = ({ book, user }) => (
   <div className="book-card flex-column border-round bg-white margin-right margin-bottom">
     <div
       className="book-card__thumbnail border-round-top"
@@ -60,13 +62,13 @@ const BookCard = ({ book }) => (
       <h3 className="flex-1">{book.title}</h3>
     </div>
     <div className="book-card__footer padding-horizontal padding-bottom flex-column">
-      <button className="center">Add to My Books</button>
+      <button className="center" onClick={() => addBook(book, user.name)}>Add to My Books</button>
     </div>
   </div>
 );
 
-const SearchResults = ({ results, searchTerm }) => {
-  const searchResults = results.map(book => <BookCard key={book.id} book={book} />);
+const SearchResults = ({ results, searchTerm, user }) => {
+  const searchResults = results.map(book => <BookCard key={book.industryIdentifiers[0].identifier} book={book} user={user} />);
   return (
     <div className="margin-top">
       <h3>Search our book database to add books to your collection: </h3>
@@ -78,11 +80,11 @@ const SearchResults = ({ results, searchTerm }) => {
   );
 };
 
-const Dashboard = ({ user, uiState, state, setState }) => (
+const Dashboard = ({ user, uiState, state, setState, books }) => (
   <div className="container margin-vertical-small">
     <Helmet title="Dashboard" />
-    <MyBooks user={user} />
-    <SearchResults results={uiState.searchResults} searchTerm={state.searchTerm} />
+    <MyBooks books={books[user.name]} />
+    <SearchResults results={uiState.searchResults} searchTerm={state.searchTerm} user={user} />
     <div className="flex">
       <input
         type="text"
@@ -99,14 +101,20 @@ const Dashboard = ({ user, uiState, state, setState }) => (
 SearchResults.propTypes = {
   results: PropTypes.arrayOf(PropTypes.object).isRequired,
   searchTerm: PropTypes.string.isRequired,
+  user: PropTypes.objectOf(PropTypes.shape).isRequired,
 };
 
 MyBooks.propTypes = {
-  user: PropTypes.objectOf(PropTypes.shape).isRequired,
+  books: PropTypes.arrayOf(PropTypes.object),
+};
+
+MyBooks.defaultProps = {
+  books: null,
 };
 
 BookCard.propTypes = {
   book: PropTypes.objectOf(PropTypes.shape).isRequired,
+  user: PropTypes.objectOf(PropTypes.shape).isRequired,
 };
 
 Dashboard.propTypes = {
@@ -114,11 +122,13 @@ Dashboard.propTypes = {
   uiState: PropTypes.objectOf(PropTypes.shape).isRequired,
   state: PropTypes.objectOf(PropTypes.shape).isRequired,
   setState: PropTypes.func.isRequired,
+  books: PropTypes.objectOf(PropTypes.shape).isRequired,
 };
 
 export default connect(store => ({
   user: store.user,
   uiState: store.uiState,
+  books: store.books,
 }))(StateProvider(Dashboard, {
   searchTerm: '',
 }, {}));
