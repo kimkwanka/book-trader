@@ -37,18 +37,21 @@ const MyBooks = ({ books }) => {
   let myBooks = null;
 
   if (books) {
-    myBooks = books.map(book => <h3 key={book.industryIdentifiers[0].identifier}>{book.title}</h3>);
+    myBooks = books.map(book => <BookCard book={book} />);
   }
 
   return (
     <div className="">
-      <h1>My Books</h1>
-      {myBooks || <h3 className="center">Your collection is empty. </h3>}
+      <h2>My Books</h2>
+      {myBooks ?
+        <div className="flex flex-wrap justify-center">
+          {myBooks}
+        </div> : <h3 className="center">Your collection is empty. </h3>}
     </div>
   );
 };
 
-const BookCard = ({ book, user }) => (
+const BookCard = ({ book, user, isSearchResult }) => (
   <div className="book-card flex-column border-round bg-white margin-right margin-bottom">
     <div
       className="book-card__thumbnail border-round-top"
@@ -62,13 +65,14 @@ const BookCard = ({ book, user }) => (
       <h3 className="flex-1">{book.title}</h3>
     </div>
     <div className="book-card__footer padding-horizontal padding-bottom flex-column">
-      <button className="center" onClick={() => addBook(book, user.name)}>Add to My Books</button>
+      {isSearchResult ? <button className="center" onClick={() => addBook(book, user.name)}>Add to My Books</button> :
+      <button className="center" onClick={null}>Offer for trade</button>}
     </div>
   </div>
 );
 
 const SearchResults = ({ results, searchTerm, user }) => {
-  const searchResults = results.map(book => <BookCard key={book.industryIdentifiers[0].identifier} book={book} user={user} />);
+  const searchResults = results.map(book => <BookCard key={book.industryIdentifiers[0].identifier} book={book} user={user} isSearchResult />);
   return (
     <div className="margin-top">
       <h3>Search our book database to add books to your collection: </h3>
@@ -80,9 +84,48 @@ const SearchResults = ({ results, searchTerm, user }) => {
   );
 };
 
+const Profile = ({ user }) => {
+  return (
+    <div className="margin-top">
+      <h2>Profile</h2>
+      <label className="margin-top-small" htmlFor="fullName">Full Name</label>
+      <input
+        type="text"
+        id="fullName"
+        placeholder="Enter your full name"
+        defaultValue={''}
+        onChange={null}
+        onKeyPress={null}
+      />
+      <label className="margin-top-small" htmlFor="city">City</label>
+      <input
+        type="text"
+        id="city"
+        placeholder="Enter your city"
+        defaultValue={''}
+        onChange={null}
+        onKeyPress={null}
+      />
+      <label className="margin-top-small" htmlFor="state">State</label>
+      <input
+        type="text"
+        id="state"
+        placeholder="Enter your state"
+        defaultValue={''}
+        onChange={null}
+        onKeyPress={null}
+      />
+      <div className="flex justify-center">
+        <button className="margin-top" onClick={null}>Save Changes</button>
+      </div>
+    </div>
+  );
+};
+
 const Dashboard = ({ user, uiState, state, setState, books }) => (
   <div className="container margin-vertical-small">
     <Helmet title="Dashboard" />
+    <h1 className>Dashboard</h1>
     <MyBooks books={books[user.name]} />
     <SearchResults results={uiState.searchResults} searchTerm={state.searchTerm} user={user} />
     <div className="flex">
@@ -93,8 +136,9 @@ const Dashboard = ({ user, uiState, state, setState, books }) => (
         onChange={e => handleSearchTermChange(e, state, setState)}
         onKeyPress={e => handleKeyPress(e, state.searchTerm)}
       />
-      <button onClick={handleSearchBookClick(state.searchTerm)}>Search</button>
+      <button className="margin-left-tiny" onClick={handleSearchBookClick(state.searchTerm)}>Search</button>
     </div>
+    <Profile user={user} />
   </div>
 );
 
