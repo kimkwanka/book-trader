@@ -7,10 +7,10 @@ import StateProvider from './shared/StateProvider';
 
 import actions from '../actions';
 
-const { setSearchResults, addBook } = actions;
+const { setSearchResults, addBook, fetchBooks } = actions;
 
 const handleSearchBookClick = searchTerm => () => {
-  axios.get(`/api/books/${searchTerm}`)
+  /*axios.get(`/api/books/${searchTerm}`)
   .then((res) => {
     const foundBooks = res.data.items.map(item => item.volumeInfo);
     console.log(foundBooks);
@@ -18,7 +18,8 @@ const handleSearchBookClick = searchTerm => () => {
   })
   .catch((err) => {
     console.log(err);
-  });
+  });*/
+  fetchBooks(searchTerm);
 };
 
 const handleKeyPress = (e, searchTerm) => {
@@ -128,6 +129,7 @@ const Dashboard = ({ user, uiState, state, setState, books }) => (
     <h1 className>Dashboard</h1>
     <MyBooks books={books[user.name]} />
     <SearchResults results={uiState.searchResults} searchTerm={state.searchTerm} user={user} />
+    { books.isFetching ? <h3>Loading</h3> : null}
     <div className="flex">
       <input
         type="text"

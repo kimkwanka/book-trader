@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { createStore, applyMiddleware, compose } from 'redux';
 import logger from 'redux-logger';
+import thunk from 'redux-thunk';
 
 import reducers from '../client/reducers';
 
@@ -18,7 +19,7 @@ const getHydratedStore = () => {
     devTools.extension = window.__REDUX_DEVTOOLS_EXTENSION__;
   }
 
-  const middleware = [];
+  const middleware = [thunk];
   if (process.env.NODE_ENV !== 'production') {
     // Add any Redux middleware we might have when not in production:
     middleware.push(logger);
