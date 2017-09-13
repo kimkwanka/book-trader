@@ -11,7 +11,7 @@ const BookCard = ({ book }) => (
     <div
       className="book-card__thumbnail border-round-top"
       style={{
-        background: `url(${book.imageLinks ? book.imageLinks.thumbnail : ''})`,
+        background: `url(${book.thumbnail})`,
         backgroundSize: 'cover',
       }}
     />
@@ -27,7 +27,7 @@ const BookCard = ({ book }) => (
 
 const SearchResults = ({ bookSearch }) => {
   const searchResults = bookSearch.searchResults.map(
-    book => <BookCard key={book.industryIdentifiers[0].identifier} book={book} />,
+    book => <BookCard key={book.key} book={book} />,
   );
   return (
     <div className="margin-top">
@@ -43,8 +43,8 @@ const SearchResults = ({ bookSearch }) => {
 };
 
 const BookSearch = ({ bookSearch }) => (
-  <div className="container margin-vertical-small">
-    <h1 className>Book Search</h1>
+  <div className="margin-vertical-small">
+    <h2 className>Book Search</h2>
     <h3>Search our book database to add books to your collection: </h3>
     <div className="flex">
       <input

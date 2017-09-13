@@ -33,9 +33,12 @@ export function searchBooks(bookName) {
     dispatch(searchBooksRequest(bookName));
     return axios.get(`/api/booksearch/${bookName}`)
     .then((res) => {
-      // console.log('GOT IT', res.data.items)
-      const foundBooks = res.data.items.map(item => item.volumeInfo);
-      // console.log('Still dandy',foundBooks)
+      const foundBooks = res.data.items.map(item => ({
+        title: item.volumeInfo.title,
+        authors: item.volumeInfo.authors,
+        thumbnail: item.volumeInfo.imageLinks ? item.volumeInfo.imageLinks.thumbnail : '',
+        key: item.volumeInfo.industryIdentifiers[0].identifier,
+      }));
       dispatch(searchBooksSuccess(foundBooks));
     })
     .catch((err) => {
