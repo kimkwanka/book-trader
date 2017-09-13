@@ -2,24 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import axios from 'axios';
+
 import StateProvider from './shared/StateProvider';
 
 import actions from '../actions';
 
-const { setSearchResults, addBook, fetchBooks } = actions;
+const { setSearchResults, addBook, searchBooks } = actions;
 
 const handleSearchBookClick = searchTerm => () => {
-  /*axios.get(`/api/books/${searchTerm}`)
-  .then((res) => {
-    const foundBooks = res.data.items.map(item => item.volumeInfo);
-    console.log(foundBooks);
-    setSearchResults(foundBooks);
-  })
-  .catch((err) => {
-    console.log(err);
-  });*/
-  fetchBooks(searchTerm);
+  searchBooks(searchTerm);
 };
 
 const handleKeyPress = (e, searchTerm) => {
@@ -123,7 +114,7 @@ const Profile = ({ user }) => {
   );
 };
 
-const Dashboard = ({ user, uiState, state, setState, books }) => (
+const Dashboard = ({ user, uiState, state, setState, books, bookSearch }) => (
   <div className="container margin-vertical-small">
     <Helmet title="Dashboard" />
     <h1 className>Dashboard</h1>
@@ -175,6 +166,7 @@ export default connect(store => ({
   user: store.user,
   uiState: store.uiState,
   books: store.books,
+  bookSearch: store.bookSearch,
 }))(StateProvider(Dashboard, {
   searchTerm: '',
 }, {}));
