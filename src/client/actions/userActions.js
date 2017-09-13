@@ -1,12 +1,8 @@
-export function renameUser(name) {
+export function setUserProfile(profile) {
   return {
-    type: 'RENAME_USER',
-    name,
-  };
-}
-
-export function toggleAuthenticated() {
-  return {
-    type: 'TOGGLE_AUTHENTICATED',
+    type: 'SET_USER_PROFILE',
+    fullName: profile.fullName,
+    city: profile.city,
+    state: profile.state,
   };
 }
