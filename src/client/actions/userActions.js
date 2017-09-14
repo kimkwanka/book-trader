@@ -6,3 +6,10 @@ export function setUserProfile(profile) {
     state: profile.state,
   };
 }
+
+export function setUserName(userName) {
+  return {
+    type: 'SET_USER_NAME',
+    userName,
+  };
+}

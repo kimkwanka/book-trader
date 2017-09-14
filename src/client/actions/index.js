@@ -1,14 +1,14 @@
 import { bindActionCreators } from 'redux';
 
 import * as userActions from './userActions';
-import * as booksActions from './booksActions';
+import * as allBooksActions from './allBooksActions';
 import * as bookSearchActions from './bookSearchActions';
 
 import store from '../../shared/store';
 
 const allActions = {
   ...userActions,
-  ...booksActions,
+  ...allBooksActions,
   ...bookSearchActions,
 };
 

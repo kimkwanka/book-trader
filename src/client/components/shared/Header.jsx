@@ -9,7 +9,7 @@ const Header = () =>
         <nav>
           <ul>
             <li><NavLink to="/dashboard" activeClassName="navItemActive">Dashboard</NavLink></li>
-            <li><NavLink to="/allbooks" activeClassName="navItemActive">All Books</NavLink></li>
+            <li><NavLink to="/booktrading" activeClassName="navItemActive">Trading</NavLink></li>
             <li><a className="button button--primary-clear" to="/">Sign In</a></li>
             { /* <li><a className="button button--primary-clear" to="/">Sign Out</a></li> */ }
           </ul>

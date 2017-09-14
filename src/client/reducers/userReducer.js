@@ -1,5 +1,5 @@
 const user = (state = {
-  name: '',
+  name: 'Owen',
   authenticated: false,
   fullName: '',
   city: '',
@@ -12,6 +12,12 @@ const user = (state = {
         fullName: action.fullName,
         city: action.city,
         state: action.state,
+      };
+    }
+    case 'SET_USER_NAME': {
+      return {
+        ...state,
+        name: action.userName,
       };
     }
     default:

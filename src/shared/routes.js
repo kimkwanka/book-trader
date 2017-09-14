@@ -1,5 +1,5 @@
 import Home from '../client/components/Home';
-import AllBooks from '../client/components/AllBooks';
+import BookTrading from '../client/components/BookTrading';
 import Dashboard from '../client/components/Dashboard';
 
 const routes = [
@@ -9,9 +9,9 @@ const routes = [
     component: Home,
   },
   {
-    path: '/allbooks',
+    path: '/booktrading',
     exact: true,
-    component: AllBooks,
+    component: BookTrading,
   },
   {
     path: '/dashboard',

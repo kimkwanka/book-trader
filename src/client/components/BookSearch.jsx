@@ -2,32 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import BookCard from './BookCard';
+
 import actions from '../actions';
 
 const { setBooksSearchTerm, searchBooks } = actions;
 
-const BookCard = ({ book }) => (
-  <div className="book-card flex-column border-round bg-white margin-right margin-bottom">
-    <div
-      className="book-card__thumbnail border-round-top"
-      style={{
-        background: `url(${book.thumbnail})`,
-        backgroundSize: 'cover',
-      }}
-    />
-    <div className="book-card__content padding flex-1">
-      <p className="italic">{book.authors}</p>
-      <h3 className="flex-1">{book.title}</h3>
-    </div>
-    <div className="book-card__footer padding-horizontal padding-bottom flex-column">
-      <button className="center" onClick={null}>Offer for trade</button>
-    </div>
-  </div>
-);
-
 const SearchResults = ({ bookSearch }) => {
   const searchResults = bookSearch.searchResults.map(
-    book => <BookCard key={book.key} book={book} />,
+    book => <BookCard key={book.key} book={book} type="addBook" />,
   );
   return (
     <div className="margin-top">
@@ -63,10 +46,6 @@ const BookSearch = ({ bookSearch }) => (
     <SearchResults bookSearch={bookSearch} />
   </div>
 );
-
-BookCard.propTypes = {
-  book: PropTypes.objectOf(PropTypes.shape).isRequired,
-};
 
 SearchResults.propTypes = {
   bookSearch: PropTypes.objectOf(PropTypes.shape).isRequired,
