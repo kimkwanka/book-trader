@@ -1,4 +1,4 @@
-const userBooks = (state = {
+const allBooks = (state = {
   isFetching: false,
   collection: [
     {
@@ -67,4 +67,4 @@ const userBooks = (state = {
   }
 };
 
-export default userBooks;
+export default allBooks;

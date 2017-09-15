@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import reactRoutes from './reactRoutes';
 import api from './api';
 import githubAuth from './githubAuth';
+import dbRoutes from './dbRoutes';
 
 const app = express();
 
@@ -17,6 +18,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Enable Github Authentication via passport
 githubAuth(app);
+
+// Enable mongo db routes
+dbRoutes(app);
 
 // Server side rendering of React pages
 app.use('*', reactRoutes);
