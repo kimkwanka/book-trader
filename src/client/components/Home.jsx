@@ -2,6 +2,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const Home = ({ user }) => (
   <div>
@@ -13,7 +14,10 @@ const Home = ({ user }) => (
           Booktrading. Everyone talks about it but only the truly professional are able to trade books day in and day out.
           Here at bookTrader we understand your commitment and want to give you what you need to take your book trading to the next level.
         </p>
-        <button className="button--accent margin">Sign in with Github</button>
+        {user.authenticated ?
+          <Link className="button button--accent margin" to="/dashboard">Start Trading</Link> :
+          <a className="button button--accent margin" href="/login">Sign in with Github</a>}
+
       </div>
     </div>
   </div>

@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 
 import reactRoutes from './reactRoutes';
 import api from './api';
+import githubAuth from './githubAuth';
 
 const app = express();
 
@@ -13,6 +14,9 @@ app.use(express.static(path.join(__dirname, '../../dist/public')));
 // Enable body-paser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Enable Github Authentication via passport
+githubAuth(app);
 
 // Server side rendering of React pages
 app.use('*', reactRoutes);

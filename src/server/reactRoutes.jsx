@@ -84,7 +84,17 @@ export default (req, res, next) => {
     // Not a React Router route, so let express handle it
     next();
   } else {
-    const store = createStore(reducers, {});
+    // After authentication, req.user is set and contains the user information
+    const store = req.user ?
+      createStore(reducers, {
+        user: {
+          name: req.user.username,
+          authenticated: true,
+          fullName: req.user.displayName,
+          city: '',
+          state: '',
+        },
+      }) : createStore(reducers, {});
 
     res.set('Content-Type', 'text/html')
       .status(200)
