@@ -33,6 +33,20 @@ const dbRoutes = (app) => {
       });
     });
   });
+  app.post('/db/sync', authenticatedOnly, (req, res) => {
+    const { hash } = req.body;
+    getServerStore.then((serverStore) => {
+      const serverHash = serverStore.getState().hash;
+      const collectionBeforeAction = serverStore.getState().collection;
+
+      // If client hash differs from server hash, send over the whole server collection data
+      if (serverHash !== hash) {
+        res.send({ collectionStatus: 'stale', collection: collectionBeforeAction });
+      } else {
+        res.send({ collectionStatus: 'ok', collection: null });
+      }
+    });
+  });
 };
 
 export default dbRoutes;

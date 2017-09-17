@@ -41,6 +41,23 @@ function saveActionAndSync(action) {
   };
 }
 
+export function syncDataIfNeeded() {
+  return (dispatch, getState) => {
+    const { allBooks: { hash } } = getState();
+
+    return axios.post('/db/sync/', { hash })
+    .then((res) => {
+      if (res.data.collectionStatus === 'stale') {
+        console.log('Out of date');
+        dispatch(syncCollection(res.data.collection));
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  };
+}
+
 export function addBook(book, owner) {
   return saveActionAndSync({
     type: 'ADD_BOOK',

@@ -4,6 +4,15 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 
 import BookCard from './BookCard';
+import StateProvider from './shared/StateProvider';
+
+import actions from '../actions';
+
+const { syncDataIfNeeded } = actions;
+
+const componentDidMount = () => {
+  syncDataIfNeeded();
+};
 
 const BookTrading = ({ user, allBooks }) => {
   const pendingTradeCards = allBooks.collection.filter(
@@ -41,4 +50,6 @@ BookTrading.propTypes = {
 export default connect(store => ({
   user: store.user,
   allBooks: store.allBooks,
-}))(BookTrading);
+}))(StateProvider(BookTrading, {}, {
+  componentDidMount,
+}));

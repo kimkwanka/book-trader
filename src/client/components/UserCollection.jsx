@@ -3,6 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import BookCard from './BookCard';
+import StateProvider from './shared/StateProvider';
+
+import actions from '../actions';
+
+const { syncDataIfNeeded } = actions;
+
+const componentDidMount = () => {
+  syncDataIfNeeded();
+};
 
 const UserCollection = ({ user, allBooks }) => (
   <div>
@@ -23,4 +32,6 @@ UserCollection.propTypes = {
 export default connect(store => ({
   allBooks: store.allBooks,
   user: store.user,
-}))(UserCollection);
+}))(StateProvider(UserCollection, {}, {
+  componentDidMount,
+}));
