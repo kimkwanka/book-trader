@@ -17,7 +17,6 @@ const Home = ({ user }) => (
         {user.authenticated ?
           <Link className="button button--accent margin" to="/dashboard">Start Trading</Link> :
           <a className="button button--accent margin" href="/login">Sign in with Github</a>}
-
       </div>
     </div>
   </div>

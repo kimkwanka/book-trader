@@ -1,5 +1,5 @@
 const user = (state = {
-  name: 'Owen',
+  name: '',
   authenticated: false,
   fullName: '',
   city: '',
