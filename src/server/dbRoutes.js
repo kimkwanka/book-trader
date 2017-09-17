@@ -1,5 +1,5 @@
 import db from './db';
-import serverStore from './serverStore';
+import getServerStore from './serverStore';
 
 const authenticatedOnly = (req, res, next) => {
   if (req.isAuthenticated()) { return next(); }
@@ -8,14 +8,29 @@ const authenticatedOnly = (req, res, next) => {
 
 const dbRoutes = (app) => {
   app.post('/db/update', authenticatedOnly, (req, res) => {
-    const action = req.body;
-    // console.log(serverStore.getState().collection);
-    serverStore.dispatch(action);
-    db.update(serverStore.getState().collection, (doc) => {
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('Saved:', doc);
-      }
-      res.send(doc.data);
+    const { action, hash } = req.body;
+    getServerStore.then((serverStore) => {
+      const serverHash = serverStore.getState().hash;
+      const collectionBeforeAction = serverStore.getState().collection;
+
+      serverStore.dispatch(action);
+
+      const dataToSave = {
+        collection: serverStore.getState().collection,
+        hash: serverStore.getState().hash,
+      };
+
+      db.update(dataToSave, (doc) => {
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Saved:', doc);
+        }
+        // If client hash differs from server hash, send over the whole server collection data
+        if (serverHash !== hash) {
+          res.send({ collectionStatus: 'stale', collection: collectionBeforeAction });
+        } else {
+          res.send({ collectionStatus: 'ok', collection: null });
+        }
+      });
     });
   });
 };

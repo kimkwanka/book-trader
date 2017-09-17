@@ -42,7 +42,7 @@ const find = (query, cb) => {
 
 const update = (obj, cb) => {
   get((_db) => {
-    _db.collection('books').update({ _id: obj.id }, { data: obj.data }, { upsert: true }, (err) => {
+    _db.collection('books').update({ _id: obj.id }, { data: obj }, { upsert: true }, (err) => {
       if (err) console.log('DB Update Error', err); // eslint-disable-line no-console
       if (cb) cb(obj);
     });

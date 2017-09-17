@@ -15,12 +15,24 @@ function saveActionFailure(action, error) {
   };
 }
 
-function saveAction(action) {
-  return (dispatch) => {
+function syncCollection(collection) {
+  return {
+    type: 'SYNC_COLLECTION',
+    collection,
+  };
+}
+
+function saveActionAndSync(action) {
+  return (dispatch, getState) => {
     dispatch(saveActionRequest(action));
-    return axios.post('/db/update/', action)
+    const { allBooks: { hash } } = getState();
+
+    return axios.post('/db/update/', { action, hash })
     .then((res) => {
-      console.log(res);
+      if (res.data.collectionStatus === 'stale') {
+        console.log('Out of date');
+        dispatch(syncCollection(res.data.collection));
+      }
       dispatch(action);
     })
     .catch((err) => {
@@ -29,9 +41,8 @@ function saveAction(action) {
   };
 }
 
-
 export function addBook(book, owner) {
-  return saveAction({
+  return saveActionAndSync({
     type: 'ADD_BOOK',
     book,
     owner,
@@ -39,7 +50,7 @@ export function addBook(book, owner) {
 }
 
 export function requestTrade(book, requester) {
-  return saveAction({
+  return saveActionAndSync({
     type: 'REQUEST_TRADE',
     book,
     requester,
@@ -47,14 +58,14 @@ export function requestTrade(book, requester) {
 }
 
 export function approveTrade(book) {
-  return saveAction({
+  return saveActionAndSync({
     type: 'APPROVE_TRADE',
     book,
   });
 }
 
 export function cancelTrade(book) {
-  return saveAction({
+  return saveActionAndSync({
     type: 'CANCEL_TRADE',
     book,
   });

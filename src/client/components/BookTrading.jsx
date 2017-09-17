@@ -5,11 +5,6 @@ import { connect } from 'react-redux';
 
 import BookCard from './BookCard';
 
-import actions from '../actions';
-
-const { setUserName } = actions;
-
-
 const BookTrading = ({ user, allBooks }) => {
   const pendingTradeCards = allBooks.collection.filter(
     book => (book.owner === user.name && book.requester !== '') || book.requester === user.name,
@@ -30,8 +25,6 @@ const BookTrading = ({ user, allBooks }) => {
       <div className="flex flex-wrap justify-center">
         {pendingTradeCards}
       </div>
-      <button onClick={() => setUserName('Owen')}>Owen</button>
-      <button onClick={() => setUserName('Jill')}>Jill</button>
       <h2>All Books:</h2>
       <div className="flex flex-wrap justify-center">
         {allBookCards}

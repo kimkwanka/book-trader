@@ -1,5 +1,8 @@
+import hash from '../../shared/hash';
+
 const allBooks = (state = {
   isFetching: false,
+  hash: -1,
   collection: [
     {
       title: 'Mega Man #46',
@@ -22,6 +25,15 @@ const allBooks = (state = {
   ],
 }, action) => {
   switch (action.type) {
+    case 'SYNC_COLLECTION': {
+      const newCollection = action.collection;
+      const newHash = hash(newCollection);
+      return {
+        ...state,
+        hash: newHash,
+        collection: newCollection,
+      };
+    }
     case 'ADD_BOOK': {
       const newCollection = state.collection.concat({
         ...action.book,
@@ -29,8 +41,12 @@ const allBooks = (state = {
         requester: '',
         id: state.collection.length,
       });
+
+      const newHash = hash(newCollection);
+
       return {
         ...state,
+        hash: newHash,
         collection: newCollection,
       };
     }
@@ -38,8 +54,11 @@ const allBooks = (state = {
       const newCollection = state.collection.slice(0);
       newCollection[action.book.id].requester = action.requester;
 
+      const newHash = hash(newCollection);
+
       return {
         ...state,
+        hash: newHash,
         collection: newCollection,
       };
     }
@@ -48,8 +67,11 @@ const allBooks = (state = {
       newCollection[action.book.id].owner = action.book.requester;
       newCollection[action.book.id].requester = '';
 
+      const newHash = hash(newCollection);
+
       return {
         ...state,
+        hash: newHash,
         collection: newCollection,
       };
     }
@@ -57,8 +79,11 @@ const allBooks = (state = {
       const newCollection = state.collection.slice(0);
       newCollection[action.book.id].requester = '';
 
+      const newHash = hash(newCollection);
+
       return {
         ...state,
+        hash: newHash,
         collection: newCollection,
       };
     }

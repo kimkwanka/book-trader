@@ -9,6 +9,8 @@ import App from '../client/App';
 import routes from '../shared/routes';
 import reducers from '../client/reducers';
 
+import getServerStore from './serverStore';
+
 const fs = require('fs');
 
 let webpackAssets = null;
@@ -84,8 +86,17 @@ export default (req, res, next) => {
     // Not a React Router route, so let express handle it
     next();
   } else {
-    // After authentication, req.user is set and contains the user information
-    const store = req.user ?
+    // Grab database backed server store
+    getServerStore.then((serverStore) => {
+      const { hash, collection } = serverStore.getState();
+      const allBooks = {
+        isFetching: false,
+        hash,
+        collection,
+      };
+
+      // After authentication, req.user is set and contains the user information
+      const store = req.user ?
       createStore(reducers, {
         user: {
           name: req.user.username,
@@ -94,10 +105,12 @@ export default (req, res, next) => {
           city: '',
           state: '',
         },
-      }) : createStore(reducers, {});
+        allBooks,
+      }) : createStore(reducers, { allBooks });
 
-    res.set('Content-Type', 'text/html')
-      .status(200)
-      .end(renderPage(matchedRoute, store));
+      res.set('Content-Type', 'text/html')
+        .status(200)
+        .end(renderPage(matchedRoute, store));
+    });
   }
 };
